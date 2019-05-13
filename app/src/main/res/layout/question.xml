@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+
+        android:fontFamily="@font/comfortaa_regular"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Question" />
+
+    <TextView
+        android:id="@+id/isOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+
+        android:fontFamily="@font/comfortaa_regular"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="Open/Closed" />
+    <!--android:fontFamily="@font/Comfortaa_Thin"-->
+    <!-- android:fontFamily="@font/Comfortaa_Regular"-->
+</LinearLayout>

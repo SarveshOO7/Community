@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "343375357359",
+    "firebase_url": "https://community-db931.firebaseio.com",
+    "project_id": "community-db931",
+    "storage_bucket": "community-db931.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343375357359:android:4f7cf57a8e811f3c",
+        "android_client_info": {
+          "package_name": "sarveshtandon.www.community"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343375357359-ptrabuaobjq834mdpeci77ab6r7918t4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcQjwuW-B2gpK5zMoroUZhtI_5I4rXZzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343375357359-ptrabuaobjq834mdpeci77ab6r7918t4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
