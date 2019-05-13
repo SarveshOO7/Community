@@ -42,6 +42,7 @@ public class CommunityPage extends AppCompatActivity {
 
         documentReference = FirebaseFirestore.getInstance().collection("Communities").document(documentId);
 
+
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -51,7 +52,7 @@ public class CommunityPage extends AppCompatActivity {
                 description.setText((CharSequence)("Description \n"+ documentSnapshot.getString(DESCRIPTION)));
             }
         });
-        //TODO:
+        //TODO: Make Members listview
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
