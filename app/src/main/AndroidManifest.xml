@@ -20,8 +20,10 @@
             android:name=".CommunityPage"
             android:label="@string/title_activity_community_page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EnterCommunity" />
-        <activity android:name=".CreateCommunityActivity" />
+        <activity android:name=".EnterCommunity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CreateCommunityActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

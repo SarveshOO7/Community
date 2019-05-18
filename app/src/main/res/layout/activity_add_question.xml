@@ -120,7 +120,7 @@
 
         android:background="@drawable/buttons"
         android:shadowColor="#004E4545"
-        android:shadowRadius="@android:dimen/dialog_min_width_minor"
+
         android:text="Submit Question"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"

@@ -26,14 +26,16 @@ public class CreateCommunityActivity extends AppCompatActivity {
     public static final String ADMIN_NAME = "adminName";
     public static final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
     public static final String IS_UNRESTRICTED = "isUnrestricted";
+    public static final String MEMBERS_LIST = "Memeber List";
     EditText descriptionView, communityNameView, adminNameView, adminPhoneNumberView;
     String description, communityName , adminName, adminPhoneNumber;
     Boolean isUnrestricted , isSucess= false;
-    private CollectionReference communitiesRef = FirebaseFirestore.getInstance().collection("Communities");
+    private CollectionReference communitiesRef = FirebaseFirestore.getInstance().collection("Communities"), members;
     Button submitCommunity;
     public final String DOCUMENT_REFERNCE = "Document Refernce";
     Switch isUnrestrictedView;
     String documentid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,6 @@ public class CreateCommunityActivity extends AppCompatActivity {
                 adminName = adminNameView.getText().toString();
                 adminPhoneNumber = adminPhoneNumberView.getText().toString();
                 isUnrestricted = isUnrestrictedView.isChecked();
-
                 Map<String, Object> dataToSave = new HashMap<String, Object>();
                 dataToSave.put(DESCRIPTION, description);
                 dataToSave.put(COMMUNITY_NAME, communityName);
@@ -66,6 +67,10 @@ public class CreateCommunityActivity extends AppCompatActivity {
                         Toast.makeText(CreateCommunityActivity.this, "Community Created!!!", Toast.LENGTH_SHORT).show();
                         isSucess=true;
                         documentid = documentReference.getId();
+                        members = FirebaseFirestore.getInstance().collection("Communities").document(documentid).collection("Memebers");
+                        Map<String, Object> k = new HashMap<String,Object>();
+                        k.put(ADMIN_NAME, adminName);
+                        members.add(k);
                         Intent intent = new Intent(getApplicationContext(), CommunityPage.class);
                         intent.putExtra(DOCUMENT_REFERNCE, documentid);
                         startActivity(intent);
@@ -77,7 +82,6 @@ public class CreateCommunityActivity extends AppCompatActivity {
                         Toast.makeText(CreateCommunityActivity.this, "Unable to create community!!! :(", Toast.LENGTH_SHORT).show();
                     }
                 });
-
             }
         });
 

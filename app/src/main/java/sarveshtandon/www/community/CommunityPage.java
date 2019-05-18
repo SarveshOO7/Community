@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,8 +15,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 public class CommunityPage extends AppCompatActivity {
 
+    public static final String USERNAME = "Username";
     public final String DOCUMENT_ID = "Document ID";
     public final String DOCUMENT_REFERNCE = "Document Refernce";
     public final String DESCRIPTION = "description";
@@ -25,20 +29,25 @@ public class CommunityPage extends AppCompatActivity {
     public final String IS_UNRESTRICTED = "isUnrestricted";
 
     DocumentReference documentReference;
-    String documentId;
+    String documentId,username;
     TextView communityName, adminName, adminPhoneNumber, description;
+    ListView membersListView;
+    List<DocumentSnapshot> membersList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_page);
-        //TODO: Get username from bundle
+
         communityName = findViewById(R.id.communityNameCommunityPage);
         adminName = findViewById(R.id.adminNameCommunityPage);
         adminPhoneNumber = findViewById(R.id.adminPhoneNumberCommunityPage);
         description = findViewById(R.id.descriptionCommunityPage);
+        membersListView = (ListView) findViewById(R.id.memebersListView);
 
         Bundle b = getIntent().getExtras();
         documentId = b.getString(DOCUMENT_REFERNCE);
+        username = b.getString(USERNAME);
 
         documentReference = FirebaseFirestore.getInstance().collection("Communities").document(documentId);
 
@@ -53,6 +62,10 @@ public class CommunityPage extends AppCompatActivity {
             }
         });
         //TODO: Make Members listview
+
+
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

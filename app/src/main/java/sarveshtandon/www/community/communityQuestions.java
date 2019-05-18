@@ -49,10 +49,10 @@ public class communityQuestions extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 l = queryDocumentSnapshots.getDocuments();
                 questionsAdapter QuestionsAdapter= new questionsAdapter(getApplicationContext(), R.layout.question, l);
-                questionsList.setAdapter(QuestionsAdapter);;
+                questionsList.setAdapter(QuestionsAdapter);
             }
         });
-        //TODO: Make questions list
+        //TODO: Make questions list Clickable
         intent = new Intent(getApplicationContext(), addQuestionActivity.class);
         intent.putExtra(QUESTIONS_COLLECTION_PATH, questions.getPath());
         intent.putExtra(DOCUMENT_ID, documentId);
