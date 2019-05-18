@@ -74,6 +74,7 @@ public class CommunityPage extends AppCompatActivity {
                 Intent intent;
                 intent = new Intent(getApplicationContext(),communityQuestions.class);
                 intent.putExtra(DOCUMENT_ID, documentId);
+                intent.putExtra(USERNAME, username);
                 Snackbar.make(view, "You are now a member of this Community.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 

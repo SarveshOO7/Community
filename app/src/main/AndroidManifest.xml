@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".voteQuestionActivity"></activity>
         <activity
             android:name=".addQuestionActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".communityQuestions"
             android:label="@string/title_activity_community_questions"
@@ -20,11 +21,14 @@
             android:name=".CommunityPage"
             android:label="@string/title_activity_community_page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EnterCommunity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CreateCommunityActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".EnterCommunity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreateCommunityActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

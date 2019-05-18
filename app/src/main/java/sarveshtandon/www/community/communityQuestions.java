@@ -7,10 +7,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -24,10 +26,13 @@ public class communityQuestions extends AppCompatActivity {
     public static final String CHOICE_1 = "Choice 1";
     public static final String CHOICE_2 = "Choice 2";
     public static final String CHOICE_3 = "Choice 3";
+
+    public static final String USERNAME = "Username";
     public static final String CHOICE_4 = "Choice 4";
     public static final String IS_OPEN = "isOpen";
     public static final String QUESTION_DATE = "Date";
     public static final String QUESTIONS_COLLECTION_PATH = "Questions Collection Path";
+    public static final String QUESTION_ID = "Question ID";
     public final String DOCUMENT_ID = "Document ID";
     public String documentId;
     CollectionReference questions;
@@ -35,11 +40,12 @@ public class communityQuestions extends AppCompatActivity {
     Intent intent;
     ListView questionsList;
     List<DocumentSnapshot> l;
+    Bundle b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_questions);
-        Bundle b= getIntent().getExtras();
+        b= getIntent().getExtras();
         documentId = b.getString(DOCUMENT_ID);
         questions = FirebaseFirestore.getInstance().collection("Communities").document(documentId).collection("Questions");
         query = questions.whereGreaterThan(QUESTION_TITLE, "");
@@ -50,6 +56,18 @@ public class communityQuestions extends AppCompatActivity {
                 l = queryDocumentSnapshots.getDocuments();
                 questionsAdapter QuestionsAdapter= new questionsAdapter(getApplicationContext(), R.layout.question, l);
                 questionsList.setAdapter(QuestionsAdapter);
+                questionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long x) {
+                        DocumentSnapshot d = l.get(i);
+                        Intent intent = new Intent(communityQuestions.this, voteQuestionActivity.class);
+                        intent.putExtra(DOCUMENT_ID, documentId);
+                        intent.putExtra(QUESTION_ID, d.getId());
+                        intent.putExtra(USERNAME, b.getString(USERNAME));
+                        startActivity(intent);
+
+                    }
+                });
             }
         });
         //TODO: Make questions list Clickable
