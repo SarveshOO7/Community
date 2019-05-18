@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".communityQuestions" >
+    android:background="#3C3F41"
+    tools:context=".communityQuestions">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton2"
@@ -28,6 +29,7 @@
         android:fontFamily="@font/comfortaa_regular"
         android:text="@string/questions"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

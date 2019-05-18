@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3C3F41"
     tools:context=".MainActivity">
 
     <Button
@@ -55,6 +56,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/comfortaa_regular"
         android:text="Community"
+        android:textColor="@color/common_google_signin_btn_text_dark_default"
         android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

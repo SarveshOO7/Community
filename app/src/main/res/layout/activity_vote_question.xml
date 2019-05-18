@@ -94,7 +94,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="#FFB302"
 
         android:buttonTint="#E4DCDA"
         android:fontFamily="@font/comfortaa_thin"

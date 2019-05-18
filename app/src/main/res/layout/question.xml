@@ -15,6 +15,7 @@
 
         android:fontFamily="@font/comfortaa_regular"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#F9F9F9"
         tools:text="Question" />
 
     <TextView
@@ -25,6 +26,7 @@
 
         android:fontFamily="@font/comfortaa_regular"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#F9F9F9"
         tools:text="Open/Closed" />
     <!--android:fontFamily="@font/Comfortaa_Thin"-->
     <!-- android:fontFamily="@font/Comfortaa_Regular"-->

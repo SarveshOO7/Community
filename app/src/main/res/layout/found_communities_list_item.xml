@@ -12,7 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:fontFamily="@font/comfortaa_regular"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#F9F9F9"
         tools:text="Name" />
 
     <TextView
@@ -20,7 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:fontFamily="@font/comfortaa_regular"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#F9F9F9"
         tools:text="Public/Private" />
 
 </LinearLayout>
