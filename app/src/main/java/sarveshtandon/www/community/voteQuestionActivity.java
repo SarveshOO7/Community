@@ -1,5 +1,6 @@
 package sarveshtandon.www.community;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -52,17 +53,25 @@ public class voteQuestionActivity extends AppCompatActivity {
 
         question.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            public void onSuccess(final DocumentSnapshot documentSnapshot) {
                 choice1.setText(documentSnapshot.getString(CHOICE_1));
                 choice2.setText(documentSnapshot.getString(CHOICE_2));
                 choice3.setText(documentSnapshot.getString(CHOICE_3));
                 choice4.setText(documentSnapshot.getString(CHOICE_4));
                 questionDetails.setText(documentSnapshot.getString(QUESTION_DETAIL));
                 questionTitle.setText(documentSnapshot.getString(QUESTION_TITLE));
-                if(documentSnapshot.getBoolean(IS_OPEN)){
-                    submit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                if(documentSnapshot.getString(CHOICE_1).isEmpty())
+                    choice1.setVisibility(View.INVISIBLE);
+                if(documentSnapshot.getString(CHOICE_2).isEmpty())
+                    choice2.setVisibility(View.INVISIBLE);
+                if(documentSnapshot.getString(CHOICE_3).isEmpty())
+                    choice3.setVisibility(View.INVISIBLE);
+                if(documentSnapshot.getString(CHOICE_4).isEmpty())
+                    choice4.setVisibility(View.INVISIBLE);
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(documentSnapshot.getBoolean(IS_OPEN)){
                             Map<String, Object> vote = new HashMap<String, Object>();
                             vote.put(USERNAME,username);
                             vote.put(CHOICE_1,choice1.isChecked());
@@ -71,8 +80,10 @@ public class voteQuestionActivity extends AppCompatActivity {
                             vote.put(CHOICE_4, choice4.isChecked());
                             question.collection("Votes").add(vote);
                         }
-                    });
-                }//TODO: Add else statement here
+                        else
+                            Snackbar.make(view, "Sorry! This Question has been closed.", Snackbar.LENGTH_LONG);
+                    }
+                });
             }
         });
 

@@ -70,7 +70,6 @@ public class communityQuestions extends AppCompatActivity {
                 });
             }
         });
-        //TODO: Make questions list Clickable
         intent = new Intent(getApplicationContext(), addQuestionActivity.class);
         intent.putExtra(QUESTIONS_COLLECTION_PATH, questions.getPath());
         intent.putExtra(DOCUMENT_ID, documentId);

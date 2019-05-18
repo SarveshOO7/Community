@@ -77,7 +77,6 @@ public class addQuestionActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(),communityQuestions.class);
                         intent.putExtra(DOCUMENT_ID, b.getString(DOCUMENT_ID));
-                        //TODO: make snackbar appear
                         intent.putExtra("show toast", true);
                         startActivity(intent);
                     }
