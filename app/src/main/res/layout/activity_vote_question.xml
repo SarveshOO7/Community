@@ -9,17 +9,19 @@
 
     <TextView
         android:id="@+id/questionTitleVote"
-        android:layout_width="379dp"
-        android:layout_height="46dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
         android:backgroundTint="#003F51B5"
         android:fontFamily="@font/comfortaa_bold_"
         android:gravity="center"
-        android:text=" Q1.Questions"
+        android:text="Loading..."
         android:textColor="#F5F5F5"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/questionDeatilsVote"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.727"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +78,7 @@
         android:layout_marginEnd="8dp"
         android:background="@color/colorAccent"
 
-        android:backgroundTint="#FF5722"
+        android:backgroundTint="@color/choice3color"
         android:buttonTint="#F3EEED"
         android:fontFamily="@font/comfortaa_thin"
         android:textColor="#FDFBFB"
@@ -94,7 +96,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="#FFB302"
+        android:background="@color/choice4color"
 
         android:buttonTint="#E4DCDA"
         android:fontFamily="@font/comfortaa_thin"
@@ -109,13 +111,15 @@
     <TextView
         android:id="@+id/questionDeatilsVote"
         android:layout_width="0dp"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="52dp"
         android:fontFamily="@font/comfortaa_regular"
         android:textColor="#F4F4F4"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/option1CheckBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,5 +143,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/option4CheckBox" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitVote" />
 
 </android.support.constraint.ConstraintLayout>

@@ -25,6 +25,10 @@ public class addQuestionActivity extends AppCompatActivity {
     public static final String CHOICE_3 = "Choice 3";
     public static final String CHOICE_4 = "Choice 4";
     public static final String IS_OPEN = "isOpen";
+    public static final String CHOICE_1_VOTES = "Choice 1 Votes";
+    public static final String CHOICE_2_VOTES = "Choice 2 Votes";
+    public static final String CHOICE_3_VOTES = "Choice 3 Votes";
+    public static final String CHOICE_4_VOTES = "Choice 4 Votes";
     TextView questionTitle, questionDetails,choice1,choice2,choice3,choice4;
     Button submitQuestion;
     CollectionReference questions;
@@ -68,6 +72,11 @@ public class addQuestionActivity extends AppCompatActivity {
                 question.put(CHOICE_3,choice3Value);
                 question.put(CHOICE_4,choice4Value);
                 question.put(IS_OPEN,isOpen);
+                question.put(CHOICE_1_VOTES, 0L);
+                question.put(CHOICE_2_VOTES, 0L);
+                question.put(CHOICE_3_VOTES, 0L);
+                question.put(CHOICE_4_VOTES, 0L);
+
 
                 questions.add(question).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
