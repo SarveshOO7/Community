@@ -64,7 +64,7 @@ public class EnterCommunity extends AppCompatActivity {
                 communityName = communityNameView.getText().toString();
                 userName = userNameView.getText().toString();
                 if((!communityName.isEmpty())&&(!userName.isEmpty())){
-                    Query query = communitiesRef.whereEqualTo(COMMUNITY_NAME, communityName);
+                    Query query = communitiesRef.orderBy(COMMUNITY_NAME).startAt(communityName).endAt(communityName+"\uf8ff");
                     query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
