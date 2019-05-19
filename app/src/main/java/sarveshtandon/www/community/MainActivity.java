@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+//TODO: Add notifications feature
+//TODO: Admin being added twice to memebers list Fix it
 
 }

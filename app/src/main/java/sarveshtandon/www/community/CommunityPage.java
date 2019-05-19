@@ -11,11 +11,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommunityPage extends AppCompatActivity {
 
@@ -29,10 +34,13 @@ public class CommunityPage extends AppCompatActivity {
     public final String IS_UNRESTRICTED = "isUnrestricted";
 
     DocumentReference documentReference;
+    CollectionReference members;
     String documentId,username;
     TextView communityName, adminName, adminPhoneNumber, description;
     ListView membersListView;
     List<DocumentSnapshot> membersList;
+    memebrsListAdapter MemebrsListAdapter;
+    private Boolean isPublic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +58,7 @@ public class CommunityPage extends AppCompatActivity {
         username = b.getString(USERNAME);
 
         documentReference = FirebaseFirestore.getInstance().collection("Communities").document(documentId);
-
+        members = FirebaseFirestore.getInstance().collection("Communities").document(documentId).collection("Members");
 
         documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -59,27 +67,55 @@ public class CommunityPage extends AppCompatActivity {
                 adminName.setText((CharSequence) documentSnapshot.getString(ADMIN_NAME));
                 adminPhoneNumber.setText((CharSequence) documentSnapshot.getString(ADMIN_PHONE_NUMBER));
                 description.setText((CharSequence)("Description \n"+ documentSnapshot.getString(DESCRIPTION)));
+                isPublic = documentSnapshot.getBoolean(IS_UNRESTRICTED);
             }
         });
-        //TODO: Make Members listview
 
 
+
+        Query q = members.orderBy("Rank").whereGreaterThan("Rank", "");
+        q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                membersList = queryDocumentSnapshots.getDocuments();
+                memebrsListAdapter MembersListAdapter = new memebrsListAdapter(getApplicationContext(), R.layout.memebers_list_item, membersList);
+                membersListView.setAdapter(MembersListAdapter);
+            }
+        });
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Add username to members
-                Intent intent;
-                intent = new Intent(getApplicationContext(),communityQuestions.class);
-                intent.putExtra(DOCUMENT_ID, documentId);
-                intent.putExtra(USERNAME, username);
-                Snackbar.make(view, "You are now a member of this Community.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
 
+                if(isPublic){
+                    Intent intent;
+                    intent = new Intent(getApplicationContext(), communityQuestions.class);
+                    intent.putExtra(DOCUMENT_ID, documentId);
+                    intent.putExtra(USERNAME, username);
+                    Map<String, Object> newMember = new HashMap<String, Object>() ;
+                    newMember.put("Name", username);
+                    newMember.put("Rank", "Rookie");
+                    members.add(newMember);
+                    startActivity(intent);
+                }
+                else {
+                    Query q2 = members.whereEqualTo("Name", username);
+                    q2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                Intent intent;
+                                intent = new Intent(getApplicationContext(), communityQuestions.class);
+                                intent.putExtra(DOCUMENT_ID, documentId);
+                                intent.putExtra(USERNAME, username);
 
-                startActivity(intent);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                }
             }
         });
     }

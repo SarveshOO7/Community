@@ -27,6 +27,9 @@ public class CreateCommunityActivity extends AppCompatActivity {
     public static final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
     public static final String IS_UNRESTRICTED = "isUnrestricted";
     public static final String MEMBERS_LIST = "Memeber List";
+    public static final String NAME = "Name";
+    public static final String RANK = "Rank";
+    public static final String CHIEF = "Chief";
     EditText descriptionView, communityNameView, adminNameView, adminPhoneNumberView;
     String description, communityName , adminName, adminPhoneNumber;
     Boolean isUnrestricted , isSucess= false;
@@ -67,9 +70,10 @@ public class CreateCommunityActivity extends AppCompatActivity {
                         Toast.makeText(CreateCommunityActivity.this, "Community Created!!!", Toast.LENGTH_SHORT).show();
                         isSucess=true;
                         documentid = documentReference.getId();
-                        members = FirebaseFirestore.getInstance().collection("Communities").document(documentid).collection("Memebers");
+                        members = FirebaseFirestore.getInstance().collection("Communities").document(documentid).collection("Members");
                         Map<String, Object> k = new HashMap<String,Object>();
-                        k.put(ADMIN_NAME, adminName);
+                        k.put(NAME, adminName);
+                        k.put(RANK, CHIEF);
                         members.add(k);
                         Intent intent = new Intent(getApplicationContext(), CommunityPage.class);
                         intent.putExtra(DOCUMENT_REFERNCE, documentid);

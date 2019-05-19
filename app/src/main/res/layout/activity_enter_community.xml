@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#3C3F41"
     tools:context=".EnterCommunity">
-    <!--TODO: Change font to Comfortaa and change button background -->
+
 
     <EditText
         android:id="@+id/searchCommunityName"
