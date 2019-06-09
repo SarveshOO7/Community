@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "343375357359-ptou16n2h99sj9qk66dpbhomag0n9ns9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sarveshtandon.www.community",
+            "certificate_hash": "5a7b7c2626e6a3a1568924bcf7c371a83ba540b1"
+          }
+        },
+        {
           "client_id": "343375357359-ptrabuaobjq834mdpeci77ab6r7918t4.apps.googleusercontent.com",
           "client_type": 3
         }
