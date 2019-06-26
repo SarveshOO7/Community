@@ -33,6 +33,7 @@ public class CommunityPage extends AppCompatActivity {
     public final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
     public final String IS_UNRESTRICTED = "isUnrestricted";
 
+    Query q;
     DocumentReference documentReference;
     CollectionReference members;
     String documentId,username;
@@ -73,7 +74,7 @@ public class CommunityPage extends AppCompatActivity {
 
 
 
-        Query q = members.orderBy("Rank").whereGreaterThan("Rank", "");
+        q = members.orderBy("Rank").whereGreaterThan("Rank", "");
         q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -94,10 +95,19 @@ public class CommunityPage extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), communityQuestions.class);
                     intent.putExtra(DOCUMENT_ID, documentId);
                     intent.putExtra(USERNAME, username);
-                    Map<String, Object> newMember = new HashMap<String, Object>() ;
-                    newMember.put("Name", username);
-                    newMember.put("Rank", "Rookie");
-                    members.add(newMember);
+                    Query q3 = members.whereEqualTo("Name", username);
+                    q3.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if(queryDocumentSnapshots.isEmpty()){
+                                Map<String, Object> newMember = new HashMap<String, Object>() ;
+                                newMember.put("Name", username);
+                                newMember.put("Rank", "Rookie");
+                                members.add(newMember);
+                            }
+                        }
+                    });
+
                     startActivity(intent);
                 }
                 else {

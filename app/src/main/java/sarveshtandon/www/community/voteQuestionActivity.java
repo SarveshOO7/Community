@@ -48,7 +48,9 @@ public class voteQuestionActivity extends AppCompatActivity {
     Button submit;
     PieChart pieChart;
     ArrayList choiceValues= new ArrayList();
-    Float choice1Percentage, choice2Percentage, choice3Percentage, choice4Percentage, sum;
+    Float choice1Percentage=0.0f, choice2Percentage=0.0f, choice3Percentage=0.0f, choice4Percentage=0.0f, sum=0.0f;
+    int finalChoice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +80,43 @@ public class voteQuestionActivity extends AppCompatActivity {
                 choice4.setText(documentSnapshot.getString(CHOICE_4));
                 questionDetails.setText(documentSnapshot.getString(QUESTION_DETAIL));
 
+                choice1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finalChoice = 1;
+                        choice2.setChecked(false);
+                        choice3.setChecked(false);
+                        choice4.setChecked(false);
+                    }
+                });
+                choice2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finalChoice = 2;
+                        choice1.setChecked(false);
+                        choice3.setChecked(false);
+                        choice4.setChecked(false);
+                    }
+                });
+                choice3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finalChoice = 3;
+                        choice2.setChecked(false);
+                        choice1.setChecked(false);
+                        choice4.setChecked(false);
+                    }
+                });
+                choice4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finalChoice = 4;
+                        choice2.setChecked(false);
+                        choice3.setChecked(false);
+                        choice1.setChecked(false);
+                    }
+                });
+
                 questionTitle.setText(documentSnapshot.getString(QUESTION_TITLE));
                 if(documentSnapshot.getString(CHOICE_1).isEmpty())
                     choice1.setVisibility(View.INVISIBLE);
@@ -102,21 +141,25 @@ public class voteQuestionActivity extends AppCompatActivity {
                                 vote.put(CHOICE_4, choice4.isChecked());
                                 if (choice1.isChecked()) {
                                     question.update(CHOICE_1_VOTES, documentSnapshot.getLong(CHOICE_1_VOTES) + 1L);
+                                    choice1Percentage=1f;
                                 }
                                 if (choice2.isChecked()) {
                                     question.update(CHOICE_2_VOTES, documentSnapshot.getLong(CHOICE_2_VOTES) + 1L);
+                                    choice2Percentage=1f;
                                 }
                                 if (choice3.isChecked()) {
                                     question.update(CHOICE_3_VOTES, documentSnapshot.getLong(CHOICE_3_VOTES) + 1L);
+                                    choice3Percentage=1f;
                                 }
                                 if (choice4.isChecked()) {
                                     question.update(CHOICE_4_VOTES, documentSnapshot.getLong(CHOICE_4_VOTES) + 1L);
+                                    choice4Percentage=1f;
                                 }
 
-                                choice1Percentage = Float.valueOf(documentSnapshot.getLong(CHOICE_1_VOTES));
-                                choice2Percentage = Float.valueOf(documentSnapshot.getLong(CHOICE_2_VOTES));
-                                choice3Percentage = Float.valueOf(documentSnapshot.getLong(CHOICE_3_VOTES));
-                                choice4Percentage = Float.valueOf(documentSnapshot.getLong(CHOICE_4_VOTES));
+                                choice1Percentage += Float.valueOf(documentSnapshot.getLong(CHOICE_1_VOTES));
+                                choice2Percentage += Float.valueOf(documentSnapshot.getLong(CHOICE_2_VOTES));
+                                choice3Percentage += Float.valueOf(documentSnapshot.getLong(CHOICE_3_VOTES));
+                                choice4Percentage += Float.valueOf(documentSnapshot.getLong(CHOICE_4_VOTES));
 
                                 sum = choice1Percentage + choice2Percentage + choice3Percentage +choice4Percentage;
 
