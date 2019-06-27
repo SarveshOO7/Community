@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,8 +87,11 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Toast.makeText(MainActivity.this, "You're now signed in. Welcome to Community.", Toast.LENGTH_SHORT).show();
                     username = user.getDisplayName();
+                    emailID = user.getEmail();
+                    Toast.makeText(MainActivity.this, "You're now signed in. Welcome to Community, "+username, Toast.LENGTH_SHORT).show();
+
+
 
                     userDoc = FirebaseFirestore.getInstance().collection("Users").document(emailID+"");
 
@@ -96,10 +101,8 @@ public class MainActivity extends AppCompatActivity {
                                 joinedCommunities = (List<String>) documentSnapshot.get(communities);
                             else{
                                 Map<String, Object> newUserData = new HashMap<String, Object>();
-                                List<String> t = Collections.<String> emptyList();
                                 newUserData.put(USERNAME, username);
                                 newUserData.put(emailID1, emailID);
-                                newUserData.put(communities,t);
                                 users.document(emailID).set(newUserData);
                                 JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
                                 joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
                                     .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            //new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.GoogleBuilder().build()))
                                     .setLogo(R.mipmap.ic_launcher)
                                     .build(),
@@ -140,12 +143,17 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 username = user.getDisplayName();
                 emailID = user.getEmail();
+                userDoc = FirebaseFirestore.getInstance().collection("Users").document(emailID+"");
+                Map<String, Object> newUserData = new HashMap<String, Object>();
+                newUserData.put(USERNAME, username);
+                newUserData.put(emailID1, emailID);
+                users.document(emailID).set(newUserData);
 
 
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // Sign in was canceled by the user, finish the activity
-                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sign in canceled"+data.getDataString(), Toast.LENGTH_LONG).show();
                 finish();
             }
         }

@@ -2,6 +2,7 @@ package sarveshtandon.www.community;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,6 +36,14 @@ public class CommunityPage extends AppCompatActivity {
     public final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
     public final String IS_UNRESTRICTED = "isUnrestricted";
 
+    public static final String NAME = "Name";
+    public static final String RANK = "Rank";
+    public static final String CHIEF = "Chief";
+
+
+    private final String emailID1 = "EmailID";
+    private final String communities = "Communities";
+
     Query q;
     DocumentReference documentReference;
     CollectionReference members;
@@ -42,6 +53,7 @@ public class CommunityPage extends AppCompatActivity {
     List<DocumentSnapshot> membersList;
     memebrsListAdapter MemebrsListAdapter;
     private Boolean isPublic;
+    private CollectionReference userCommunities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,9 @@ public class CommunityPage extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         documentId = b.getString(DOCUMENT_REFERNCE);
         username = b.getString(USERNAME);
+
+        userCommunities = FirebaseFirestore.getInstance().collection("Users").document(b.getString(emailID1, "Tester")).collection(communities);
+
 
         documentReference = FirebaseFirestore.getInstance().collection("Communities").document(documentId);
         members = FirebaseFirestore.getInstance().collection("Communities").document(documentId).collection("Members");
@@ -107,7 +122,16 @@ public class CommunityPage extends AppCompatActivity {
                             }
                         }
                     });
-
+                    Map<String, Object> communitData = new HashMap<String, Object>();
+                    communitData.put(NAME, communityName.getText().toString());
+                    communitData.put(RANK,"Rookie");
+                    userCommunities.add(communitData).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CommunityPage.this, "Unable to enter community! :(", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
                     startActivity(intent);
                 }
                 else {
@@ -120,7 +144,16 @@ public class CommunityPage extends AppCompatActivity {
                                 intent = new Intent(getApplicationContext(), communityQuestions.class);
                                 intent.putExtra(DOCUMENT_ID, documentId);
                                 intent.putExtra(USERNAME, username);
-
+                                Map<String, Object> communitData = new HashMap<String, Object>();
+                                communitData.put(NAME, communityName.getText().toString());
+                                communitData.put(RANK,"Rookie");
+                                userCommunities.add(communitData).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(CommunityPage.this, "Unable to enter community! :(", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
                                 startActivity(intent);
                             }
                         }

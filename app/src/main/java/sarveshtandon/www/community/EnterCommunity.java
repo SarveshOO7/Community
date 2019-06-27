@@ -35,6 +35,10 @@ public class EnterCommunity extends AppCompatActivity {
     public final String ADMIN_NAME = "adminName";
     public final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
     public final String IS_UNRESTRICTED = "isUnrestricted";
+
+    private final String emailID1 = "EmailID";
+    private final String communities = "Communities";
+
     EditText descriptionView, communityNameView, adminNameView, adminPhoneNumberView, userNameView;
     String description, communityName , adminName, adminPhoneNumber, userName;
     Boolean isUnrestricted;
@@ -45,19 +49,22 @@ public class EnterCommunity extends AppCompatActivity {
     Button searchCommunity;
     Switch isUnrestrictedView;
 
-    public Activity getContext() {
-        return this;
-    }
+    Bundle b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_community);
 
+        b = getIntent().getExtras();
+
         searchCommunity = (Button) findViewById(R.id.searchForCommunityButton);
         userNameView = (EditText) findViewById(R.id.userName);
         communityNameView = (EditText) findViewById(R.id.searchCommunityName);
         communitiesFound = (ListView) findViewById(R.id.foundCommunities);
+
+        userNameView.setText(b.getString(USERNAME));
+
         searchCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +95,7 @@ public class EnterCommunity extends AppCompatActivity {
                                     intent.putExtra(COMMUNITY_NAME, d.getString(COMMUNITY_NAME) );
                                     intent.putExtra(DOCUMENT_REFERNCE, d.getId());
                                     intent.putExtra(USERNAME, userName);
+                                    intent.putExtra(emailID1, b.getString(emailID1));
                                     startActivity(intent);
                                 }
                             });
