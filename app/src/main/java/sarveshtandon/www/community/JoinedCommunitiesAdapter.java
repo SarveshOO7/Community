@@ -16,7 +16,7 @@ import com.google.firebase.firestore.model.Document;
 
 import java.util.List;
 
-public class JoinedCommunitiesAdapter extends ArrayAdapter<String> {
+public class JoinedCommunitiesAdapter extends ArrayAdapter<DocumentSnapshot> {
     public static final String DESCRIPTION = "description";
     public static final String COMUNITY_NAME = "communityName";
     public static final String ADMIN_NAME = "adminName";
@@ -31,7 +31,7 @@ public class JoinedCommunitiesAdapter extends ArrayAdapter<String> {
     public static final String IS_OPEN = "isOpen";
     public static final String QUESTION_DATE = "Date";
     Context context;
-    public JoinedCommunitiesAdapter(Context context, int resource, List<String> objects) {
+    public JoinedCommunitiesAdapter(Context context, int resource, List<DocumentSnapshot> objects) {
         super(context, resource, objects);
         this.context = context;
     }
@@ -42,9 +42,9 @@ public class JoinedCommunitiesAdapter extends ArrayAdapter<String> {
             LayoutInflater v = LayoutInflater.from(context);
             convertView = v.inflate(R.layout.question, parent, false);
         }
-
+        DocumentSnapshot d = getItem(position);
         TextView questionTitle = (TextView) convertView.findViewById(R.id.joinedCommunityName);
-        questionTitle.setText(getItem(position));
+        questionTitle.setText(d.getString("Name"));
         return convertView;
     }
 };

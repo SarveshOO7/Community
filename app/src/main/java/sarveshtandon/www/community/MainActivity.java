@@ -27,7 +27,9 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     DocumentReference userDoc;
     CollectionReference users;
-    private List<String> joinedCommunities;
+    private List<DocumentSnapshot> joinedCommunities = new ArrayList<>();
     private Query q;
     ListView joinedCommunitiesListView;
     FloatingActionButton fab;
@@ -94,20 +96,29 @@ public class MainActivity extends AppCompatActivity {
 
 
                     userDoc = FirebaseFirestore.getInstance().collection("Users").document(emailID+"");
+                    final CollectionReference userCommunities = FirebaseFirestore.getInstance().collection("Users").document(emailID+"").collection("Communities");
+
 
                     userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot!=null)
-                                joinedCommunities = (List<String>) documentSnapshot.get(communities);
+                            if(documentSnapshot!=null){
+                                Query q = userCommunities.orderBy("Rank");
+                                q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        joinedCommunities = queryDocumentSnapshots.getDocuments();
+                                    }
+                                });
+                            }
                             else{
                                 Map<String, Object> newUserData = new HashMap<String, Object>();
                                 newUserData.put(USERNAME, username);
                                 newUserData.put(emailID1, emailID);
                                 users.document(emailID).set(newUserData);
-                                JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
-                                joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
+                                joinedCommunities = Collections.emptyList();
                             }
-
+                            JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
+                            joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
 
                         }
                     });
