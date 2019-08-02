@@ -135,7 +135,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/button"
         android:fontFamily="@font/comfortaa_bold_"
-        android:text="Submit"
+        android:text="Submit/Results"
         android:textAllCaps="false"
         android:textColor="#FDFBFC"
         android:textSize="24sp"

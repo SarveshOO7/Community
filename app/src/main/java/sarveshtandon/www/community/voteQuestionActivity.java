@@ -9,15 +9,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +45,7 @@ public class voteQuestionActivity extends AppCompatActivity {
 
     Bundle b;
     DocumentReference question;
+    CollectionReference votes;
     String username;
     CheckBox choice1, choice2, choice3, choice4;
     TextView questionTitle, questionDetails;
@@ -68,7 +73,20 @@ public class voteQuestionActivity extends AppCompatActivity {
 
         b = getIntent().getExtras();
         question = FirebaseFirestore.getInstance().collection("Communities").document(b.getString(DOCUMENT_ID)).collection("Questions").document(b.getString(QUESTION_ID));
+        votes = FirebaseFirestore.getInstance().collection("Communities").document(b.getString(DOCUMENT_ID)).collection("Questions").document(b.getString(QUESTION_ID)).collection("Votes");
         username = b.getString(USERNAME);
+
+        Query query = votes.whereEqualTo("Username", username);
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()) {
+                    hasVoted = true;
+                    Toast.makeText(getApplicationContext(), "You have already voted!!!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
 
         question.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -130,8 +148,11 @@ public class voteQuestionActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if(documentSnapshot.getBoolean(IS_OPEN)){
-                            if(hasVoted)
+                            if(hasVoted) {
                                 Snackbar.make(view, "You have already voted!", Snackbar.LENGTH_INDEFINITE);
+                                displayVotes(documentSnapshot.getLong(CHOICE_1_VOTES), documentSnapshot.getLong(CHOICE_2_VOTES), documentSnapshot.getLong(CHOICE_3_VOTES), documentSnapshot.getLong(CHOICE_4_VOTES));
+                                //TODO: Make choices unclickable
+                            }
                             else {
                                 Map<String, Object> vote = new HashMap<String, Object>();
                                 vote.put(USERNAME, username);
@@ -171,6 +192,9 @@ public class voteQuestionActivity extends AppCompatActivity {
                                 choice3Percentage  /=sum/100;
                                 choice4Percentage  /=sum/100;
 
+                                displayVotes(choice1Percentage, choice2Percentage, choice3Percentage, choice4Percentage);
+
+                                /*
                                 choiceValues.add(new Entry(choice1Percentage,0 ));
                                 choiceValues.add(new Entry(choice2Percentage,1 ));
                                 choiceValues.add(new Entry(choice3Percentage,2 ));
@@ -201,10 +225,12 @@ public class voteQuestionActivity extends AppCompatActivity {
                                 pieDataSet.setValueTextColor(R.color.white);
 
 
-                                question.collection("Votes").add(vote);
+
                                 pieChart.setVisibility(View.VISIBLE);
                                 pieChart.animateXY(5000, 5000);
+                                */
                                 hasVoted = true;
+                                question.collection("Votes").add(vote);
                             }
 
                         }
@@ -216,5 +242,41 @@ public class voteQuestionActivity extends AppCompatActivity {
         });
 
 
+    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void displayVotes(float choice1Percent, float choice2Percent, float choice3Percent, float choice4Percent){
+
+        choiceValues.add(new Entry(choice1Percent,0 ));
+        choiceValues.add(new Entry(choice2Percent,1 ));
+        choiceValues.add(new Entry(choice3Percent,2 ));
+        choiceValues.add(new Entry(choice4Percent,3 ));
+
+
+        PieDataSet pieDataSet = new PieDataSet(choiceValues, "Votes");
+
+        ArrayList year = new ArrayList();
+
+        year.add("");
+        year.add("");
+        year.add("");
+        year.add("");
+
+        PieData pieData = new PieData(year, pieDataSet);
+        pieChart.setData(pieData);
+        int[] colors = {
+                getColor(R.color.colorAccent),
+                getColor(R.color.colorPrimary),
+                getColor(R.color.choice3color),
+                getColor(R.color.choice4color)
+        };
+
+
+        pieDataSet.setColors(colors);
+        pieDataSet.setValueTextSize(20f);
+        pieDataSet.setValueTextColor(R.color.white);
+
+        pieChart.setVisibility(View.VISIBLE);
+        pieChart.animateXY(5000, 5000);
+        //hasVoted = true;
     }
 }
