@@ -17,4 +17,15 @@
         android:textColor="#F9F9F9"
         tools:text="Joined Community Name" />
 
+    <TextView
+        android:id="@+id/joinedCommunityRank"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:fontFamily="@font/comfortaa_regular"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#E6E6E6"
+        android:textSize="14sp"
+        tools:text="Joined Community Rank" />
+
 </LinearLayout>

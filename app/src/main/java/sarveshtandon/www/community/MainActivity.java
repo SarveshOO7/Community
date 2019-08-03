@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     DocumentReference userDoc;
     CollectionReference users;
-    private List<DocumentSnapshot> joinedCommunities = new ArrayList<>();
+    private List<DocumentSnapshot> joinedCommunities = new ArrayList<DocumentSnapshot>();
     private Query q;
     ListView joinedCommunitiesListView;
     FloatingActionButton fab;
@@ -102,13 +102,17 @@ public class MainActivity extends AppCompatActivity {
                     userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(documentSnapshot!=null){
-                                Query q = userCommunities.orderBy("Rank");
+                                Query q = userCommunities.whereGreaterThanOrEqualTo("Rank", "").orderBy("Rank");
                                 q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         joinedCommunities = queryDocumentSnapshots.getDocuments();
+                                        Toast.makeText(MainActivity.this, "There y!"+queryDocumentSnapshots.isEmpty()+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
+                                        JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
+                                        joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
                                     }
                                 });
+
                             }
                             else{
                                 Map<String, Object> newUserData = new HashMap<String, Object>();
@@ -116,10 +120,13 @@ public class MainActivity extends AppCompatActivity {
                                 newUserData.put(emailID1, emailID);
                                 users.document(emailID).set(newUserData);
                                 joinedCommunities = Collections.emptyList();
+                                Toast.makeText(MainActivity.this, "The"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
+
                             }
+                            Toast.makeText(MainActivity.this, "Th y!"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
                             JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
                             joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
-
+                            //Toast.makeText(MainActivity.this, "There you go!!!"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
                         }
                     });
 

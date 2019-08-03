@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,11 +41,15 @@ public class JoinedCommunitiesAdapter extends ArrayAdapter<DocumentSnapshot> {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater v = LayoutInflater.from(context);
-            convertView = v.inflate(R.layout.question, parent, false);
+            convertView = v.inflate(R.layout.communities_list_item, parent, false);
         }
         DocumentSnapshot d = getItem(position);
-        TextView questionTitle = (TextView) convertView.findViewById(R.id.joinedCommunityName);
-        questionTitle.setText(d.getString("Name"));
+        TextView communityTitle = (TextView) convertView.findViewById(R.id.joinedCommunityName);
+        TextView userRank = (TextView) convertView.findViewById(R.id.joinedCommunityRank);
+        communityTitle.setText(d.getString("Name"));
+        userRank.setText(d.getString("Rank"));
+        communityTitle.setVisibility(View.VISIBLE);
+
         return convertView;
     }
 };
