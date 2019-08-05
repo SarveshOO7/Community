@@ -5,47 +5,38 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-
-
-
-import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
     private final String emailID1 = "EmailID";
     private final String communities = "Communities";
+    public final String DOCUMENT_REFERNCE = "Document Refernce";
+    public final String DESCRIPTION = "description";
+    public final String COMMUNITY_NAME = "communityName";
+    public final String ADMIN_NAME = "adminName";
+    public final String ADMIN_PHONE_NUMBER = "adminPhoneNumber";
+    public final String IS_UNRESTRICTED = "isUnrestricted";
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -55,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String ANONYMOUS = "Guest";
     private Intent intent;
     DocumentReference userDoc;
-    CollectionReference users;
+    CollectionReference users,communitiesRef;
     private List<DocumentSnapshot> joinedCommunities = new ArrayList<DocumentSnapshot>();
     private Query q;
     ListView joinedCommunitiesListView;
@@ -69,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         joinedCommunitiesListView = findViewById(R.id.joinedCommunities);
 
         users = FirebaseFirestore.getInstance().collection("Users");
+        communitiesRef = FirebaseFirestore.getInstance().collection("Communities");
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +99,22 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         joinedCommunities = queryDocumentSnapshots.getDocuments();
-                                        Toast.makeText(MainActivity.this, "There y!"+queryDocumentSnapshots.isEmpty()+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
                                         JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
                                         joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
+                                        joinedCommunitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long x) {
+                                                DocumentSnapshot pressedCommunity = joinedCommunities.get(i);
+                                                Query q = communitiesRef.whereEqualTo("communityName", pressedCommunity.getString("Name")) ;
+                                                q.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                                        openCommunityPage(queryDocumentSnapshots.getDocuments().get(0).getId());
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
 
@@ -120,10 +125,8 @@ public class MainActivity extends AppCompatActivity {
                                 newUserData.put(emailID1, emailID);
                                 users.document(emailID).set(newUserData);
                                 joinedCommunities = Collections.emptyList();
-                                Toast.makeText(MainActivity.this, "The"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
 
                             }
-                            Toast.makeText(MainActivity.this, "Th y!"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
                             JoinedCommunitiesAdapter joinedCommunitiesAdapter = new JoinedCommunitiesAdapter(getApplicationContext(), R.layout.communities_list_item, joinedCommunities);
                             joinedCommunitiesListView.setAdapter(joinedCommunitiesAdapter);
                             //Toast.makeText(MainActivity.this, "There you go!!!"+joinedCommunities.isEmpty(), Toast.LENGTH_SHORT).show();
@@ -152,6 +155,30 @@ public class MainActivity extends AppCompatActivity {
         };
 
     }
+
+    private void openCommunityPage(String id) {
+        DocumentReference communitySelected = FirebaseFirestore.getInstance().collection("Communities").document(id);
+        communitySelected.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot d) {
+                Intent intent;
+                intent = new Intent(MainActivity.this, CommunityPage.class);
+
+                intent.putExtra(DESCRIPTION, d.getString(DESCRIPTION) );
+                intent.putExtra(ADMIN_NAME, d.getString(ADMIN_NAME) );
+                intent.putExtra(ADMIN_PHONE_NUMBER, d.getString(ADMIN_PHONE_NUMBER) );
+                intent.putExtra(IS_UNRESTRICTED, d.getBoolean(IS_UNRESTRICTED) );
+                intent.putExtra(COMMUNITY_NAME, d.getString(COMMUNITY_NAME) );
+                intent.putExtra(DOCUMENT_REFERNCE, d.getId());
+                intent.putExtra(USERNAME, username);
+                intent.putExtra(emailID1, emailID);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
