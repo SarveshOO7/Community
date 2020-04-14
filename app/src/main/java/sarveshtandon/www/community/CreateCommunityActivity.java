@@ -35,6 +35,7 @@ public class CreateCommunityActivity extends AppCompatActivity {
     public static final String NAME = "Name";
     public static final String RANK = "Rank";
     public static final String CHIEF = "Chief";
+    public static final String COMMUNITY_NAME_CASE_IGNORE = "communityNameCaseIgnore";
 
     private final String emailID1 = "EmailID";
     private final String communities = "Communities";
@@ -51,6 +52,7 @@ public class CreateCommunityActivity extends AppCompatActivity {
     CollectionReference userCommunities;
 
     Bundle b;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,44 +80,50 @@ public class CreateCommunityActivity extends AppCompatActivity {
                 adminName = adminNameView.getText().toString();
                 adminPhoneNumber = adminPhoneNumberView.getText().toString();
                 isUnrestricted = isUnrestrictedView.isChecked();
-                Map<String, Object> dataToSave = new HashMap<String, Object>();
-                dataToSave.put(DESCRIPTION, description);
-                dataToSave.put(COMMUNITY_NAME, communityName);
-                dataToSave.put(ADMIN_NAME, adminName);
-                dataToSave.put(ADMIN_PHONE_NUMBER, adminPhoneNumber);
-                dataToSave.put(IS_UNRESTRICTED, isUnrestricted);
-                communitiesRef.add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(final DocumentReference documentReference) {
-                        Toast.makeText(CreateCommunityActivity.this, "Community Created!!!", Toast.LENGTH_SHORT).show();
-                        isSucess=true;
-                        documentid = documentReference.getId();
-                        members = FirebaseFirestore.getInstance().collection("Communities").document(documentid).collection("Members");
-                        Map<String, Object> k = new HashMap<String,Object>();
-                        k.put(NAME, adminName);
-                        k.put(RANK, CHIEF);
-                        members.add(k);
-                        Map<String, Object> communityData = new HashMap<String, Object>();
-                        communityData.put(NAME, communityName);
-                        communityData.put(RANK,CHIEF);
-                        userCommunities.add(communityData).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(CreateCommunityActivity.this, "Unable to create community! :(", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        });
-                        Intent intent = new Intent(getApplicationContext(), CommunityPage.class);
-                        intent.putExtra(DOCUMENT_REFERNCE, documentid);
-                        startActivity(intent);
+                if(description.isEmpty() || communityName.isEmpty() || adminName.isEmpty() || adminPhoneNumber.isEmpty()){
+                    Toast.makeText(CreateCommunityActivity.this, "Please fill the form! Unable to create community!!! :(", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Map<String, Object> dataToSave = new HashMap<String, Object>();
+                    dataToSave.put(DESCRIPTION, description);
+                    dataToSave.put(COMMUNITY_NAME, communityName);
+                    dataToSave.put(COMMUNITY_NAME_CASE_IGNORE, communityName.toUpperCase());
+                    dataToSave.put(ADMIN_NAME, adminName);
+                    dataToSave.put(ADMIN_PHONE_NUMBER, adminPhoneNumber);
+                    dataToSave.put(IS_UNRESTRICTED, isUnrestricted);
+                    communitiesRef.add(dataToSave).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(final DocumentReference documentReference) {
+                            Toast.makeText(CreateCommunityActivity.this, "Community Created!!!", Toast.LENGTH_SHORT).show();
+                            isSucess = true;
+                            documentid = documentReference.getId();
+                            members = FirebaseFirestore.getInstance().collection("Communities").document(documentid).collection("Members");
+                            Map<String, Object> k = new HashMap<String, Object>();
+                            k.put(NAME, adminName);
+                            k.put(RANK, CHIEF);
+                            members.add(k);
+                            Map<String, Object> communityData = new HashMap<String, Object>();
+                            communityData.put(NAME, communityName);
+                            communityData.put(RANK, CHIEF);
+                            userCommunities.add(communityData).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CreateCommunityActivity.this, "Unable to create community! :(", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
+                            Intent intent = new Intent(getApplicationContext(), CommunityPage.class);
+                            intent.putExtra(DOCUMENT_REFERNCE, documentid);
+                            startActivity(intent);
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CreateCommunityActivity.this, "Unable to create community!!! :(", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CreateCommunityActivity.this, "Unable to create community!!! :(", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 

@@ -125,6 +125,7 @@ public class CommunityPage extends AppCompatActivity {
                     Map<String, Object> communitData = new HashMap<String, Object>();
                     communitData.put(NAME, communityName.getText().toString());
                     communitData.put(RANK,"Rookie");
+                    communitData.put(DOCUMENT_ID, documentId);
                     userCommunities.add(communitData).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
